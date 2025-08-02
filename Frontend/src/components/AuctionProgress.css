@@ -81,6 +81,40 @@
   color: #cd7f32;
 }
 
+/* Eye Icon Container */
+.eye-icon-container {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.5rem;
+}
+
+.view-all-players-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+  width: 40px;
+  height: 40px;
+}
+
+.view-all-players-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .combined-progress {
@@ -90,5 +124,10 @@
   
   .progress-item {
     flex: none;
+  }
+  
+  .eye-icon-container {
+    align-self: flex-end;
+    padding-bottom: 0;
   }
 } 

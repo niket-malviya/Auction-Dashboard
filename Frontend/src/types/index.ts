@@ -1,6 +1,7 @@
 // Types
 export type PlayerType = 'Batter' | 'Bowler' | 'Allrounder';
 export type PlayerCategory = 'Gold' | 'Silver' | 'Bronze';
+export type PlayerStatus = 'available' | 'sold' | 'unsold';
 
 export interface Player {
   id: string;
@@ -9,6 +10,7 @@ export interface Player {
   photo: string;
   type: PlayerType;
   category: PlayerCategory;
+  status?: PlayerStatus;
 }
 
 export interface Team {

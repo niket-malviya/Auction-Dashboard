@@ -10,12 +10,15 @@
   max-width: 400px;
   transition: box-shadow 0.2s;
 }
+
 .player-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
+
 .player-photo-container {
   position: relative;
 }
+
 .player-photo {
   width: 80px;
   height: 80px;
@@ -24,6 +27,7 @@
   border: 3px solid #fff;
   box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
+
 .player-type-badge {
   position: absolute;
   bottom: -10px;
@@ -37,9 +41,11 @@
   font-weight: 600;
   box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
+
 .player-info h3 {
   margin: 0 0 0.2rem 0;
 }
+
 .category-badge {
   padding: 2px 8px;
   border-radius: 8px;
@@ -47,18 +53,22 @@
   font-size: 0.85em;
   margin-left: 0.3em;
 }
+
 .category-badge.gold {
   background: #ffd700;
   color: #333;
 }
+
 .category-badge.silver {
   background: #c0c0c0;
   color: #333;
 }
+
 .category-badge.bronze {
   background: #cd7f32;
   color: #fff;
 }
+
 @media (max-width: 600px) {
   .player-card {
     flex-direction: column;

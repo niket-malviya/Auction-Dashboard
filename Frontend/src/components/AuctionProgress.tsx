@@ -1,4 +1,5 @@
 import React from 'react';
+import { EyeIcon } from '@heroicons/react/24/outline';
 import './AuctionProgress.css';
 
 interface AuctionProgressProps {
@@ -10,6 +11,7 @@ interface AuctionProgressProps {
   maxSilver: number;
   bronzeSelected: number;
   maxBronze: number;
+  onViewAllPlayers?: () => void;
 }
 
 const AuctionProgress: React.FC<AuctionProgressProps> = ({
@@ -20,7 +22,8 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
   silverSelected,
   maxSilver,
   bronzeSelected,
-  maxBronze
+  maxBronze,
+  onViewAllPlayers
 }) => {
   const overallProgress = (currentPlayer / totalPlayers) * 100;
   const goldProgress = (goldSelected / maxGold) * 100;
@@ -81,6 +84,18 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
             ></div>
           </div>
         </div>
+        
+        {onViewAllPlayers && (
+          <div className="eye-icon-container">
+            <button 
+              className="view-all-players-btn" 
+              onClick={onViewAllPlayers}
+              title="View all players"
+            >
+              <EyeIcon className="eye-icon" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

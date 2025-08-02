@@ -161,9 +161,11 @@ const Teams: React.FC = () => {
         marginTop: '2rem'
       }}>
         {teams.map(team => (
-          <div key={team.id} onClick={() => handleTeamClick(team)} style={{ cursor: 'pointer' }}>
-            <TeamCard team={team} />
-          </div>
+          <TeamCard 
+            key={team.id} 
+            team={team} 
+            onViewPlayers={handleTeamClick}
+          />
         ))}
       </div>
 

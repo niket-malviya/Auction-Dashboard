@@ -1,0 +1,132 @@
+.unsold-badge {
+  background: linear-gradient(45deg, #dc2626, #b91c1c);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  display: inline-block;
+  text-align: center;
+  min-width: 80px;
+}
+
+.unsold-badge.animated {
+  animation: unsoldPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes unsoldPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(220, 38, 38, 0.5);
+  }
+}
+
+/* Re-available badge for unsold players that become available again */
+.reavailable-badge {
+  background: linear-gradient(45deg, #059669, #047857);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+  display: inline-block;
+  text-align: center;
+  min-width: 120px;
+  animation: reavailablePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes reavailablePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(5, 150, 105, 0.5);
+  }
+}
+
+/* Unsold overlay for player cards */
+.unsold-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(220, 38, 38, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* Unsold player card styling */
+.player-card-enhanced.unsold {
+  position: relative;
+  opacity: 0.9;
+  transform: scale(0.98);
+  transition: all 0.3s ease;
+}
+
+.player-card-enhanced.unsold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(185, 28, 28, 0.1));
+  border-radius: 16px;
+  z-index: 1;
+  animation: unsoldGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes unsoldGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(185, 28, 28, 0.5);
+  }
+}
+
+/* Re-available player card styling */
+.player-card-enhanced.reavailable {
+  position: relative;
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.3s ease;
+}
+
+.player-card-enhanced.reavailable::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(4, 120, 87, 0.1));
+  border-radius: 16px;
+  z-index: 1;
+  animation: reavailableGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes reavailableGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(5, 150, 105, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(4, 120, 87, 0.5);
+  }
+} 

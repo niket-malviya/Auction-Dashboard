@@ -99,6 +99,25 @@
   background: #ccc;
 }
 
+/* Unsold state styling */
+.player-card-enhanced.unsold .bid-input-section {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.player-card-enhanced.unsold .player-navigation {
+  opacity: 0.6;
+}
+
+.player-card-enhanced.unsold .nav-btn {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.player-card-enhanced.unsold .nav-btn:hover {
+  background: #ccc;
+}
+
 /* Max Bid Info */
 .max-bid-info {
   font-size: 0.85rem;

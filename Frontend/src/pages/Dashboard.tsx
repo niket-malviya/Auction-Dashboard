@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useAuction } from '../context/AuctionContext';
-import PlayerCard from '../components/PlayerCard';
-import TeamCard from '../components/TeamCard';
 import BidInput from '../components/BidInput';
 import SoldPopup from '../components/SoldPopup';
 import TeamPlayerListPopup from '../components/TeamPlayerListPopup';
+import AllPlayersPopup from '../components/AllPlayersPopup';
 import AuctionProgress from '../components/AuctionProgress';
+import { EyeIcon } from '@heroicons/react/24/outline';
 import './Dashboard.css';
 import Sold from '../components/Sold';
+import Unsold from '../components/Unsold';
+import Resell from '../components/Resell';
 
 // Define types for our mock data
 interface MockPlayer {
@@ -19,6 +20,8 @@ interface MockPlayer {
   category: string;
   height: string;
   weight: string;
+  status?: 'available' | 'sold' | 'unsold';
+  wasUnsold?: boolean;
   stats: {
     ppg: number;
     rpg: number;
@@ -56,6 +59,7 @@ const mockPlayers: MockPlayer[] = [
     category: 'Gold',
     height: "6'2\"",
     weight: "185 lbs",
+    status: 'available',
     stats: {
       ppg: 18.5,
       rpg: 4.1,
@@ -72,6 +76,7 @@ const mockPlayers: MockPlayer[] = [
     category: 'Gold',
     height: "6'4\"",
     weight: "200 lbs",
+    status: 'available',
     stats: {
       ppg: 22.1,
       rpg: 3.8,
@@ -88,6 +93,7 @@ const mockPlayers: MockPlayer[] = [
     category: 'Silver',
     height: "6'0\"",
     weight: "170 lbs",
+    status: 'available',
     stats: {
       ppg: 15.2,
       rpg: 5.8,
@@ -104,6 +110,7 @@ const mockPlayers: MockPlayer[] = [
     category: 'Silver',
     height: "6'8\"",
     weight: "220 lbs",
+    status: 'available',
     stats: {
       ppg: 12.8,
       rpg: 8.4,
@@ -120,6 +127,7 @@ const mockPlayers: MockPlayer[] = [
     category: 'Bronze',
     height: "6'5\"",
     weight: "190 lbs",
+    status: 'available',
     stats: {
       ppg: 8.9,
       rpg: 6.2,
@@ -246,24 +254,59 @@ const Dashboard: React.FC = () => {
   const [selectedTeam, setSelectedTeam] = useState('');
   const [showSoldPopup, setShowSoldPopup] = useState(false);
   const [showTeamPopup, setShowTeamPopup] = useState(false);
+  const [showAllPlayersPopup, setShowAllPlayersPopup] = useState(false);
   const [showUnsoldConfirm, setShowUnsoldConfirm] = useState(false);
   const [selectedTeamForPopup, setSelectedTeamForPopup] = useState<MockTeam | null>(null);
-  const [soldPlayers, setSoldPlayers] = useState<Set<string>>(new Set());
   const [teamData, setTeamData] = useState<MockTeam[]>(mockTeams);
+  const [players, setPlayers] = useState<MockPlayer[]>(mockPlayers);
+  const [showReavailableNotification, setShowReavailableNotification] = useState(false);
+  
+  // Sort players: available first, then sold, then unsold at the end
+  // But if all available players are sold, make unsold players available again
+  const availablePlayers = players.filter(player => player.status === 'available');
+  const soldPlayers = players.filter(player => player.status === 'sold');
+  const unsoldPlayers = players.filter(player => player.status === 'unsold');
+  
+  // If no available players left, make unsold players available
+  const shouldMakeUnsoldAvailable = availablePlayers.length === 0 && unsoldPlayers.length > 0;
+  
+  // Show all players for navigation, but sort them properly
+  let filteredPlayers = [...players];
+  
+  const sortedPlayers = filteredPlayers.sort((a, b) => {
+    // First sort by status: available first, then unsold, then sold
+    const statusOrder = { 'available': 1, 'unsold': 2, 'sold': 3 };
+    const statusA = statusOrder[a.status as keyof typeof statusOrder] || 0;
+    const statusB = statusOrder[b.status as keyof typeof statusOrder] || 0;
+    
+    if (statusA !== statusB) {
+      return statusA - statusB;
+    }
+    
+    // Then sort by category priority: Gold, Silver, Bronze
+    const categoryOrder = { 'Gold': 1, 'Silver': 2, 'Bronze': 3 };
+    return (categoryOrder[a.category as keyof typeof categoryOrder] || 0) - 
+           (categoryOrder[b.category as keyof typeof categoryOrder] || 0);
+  });
   
   // Calculate category counts from sold players
-  const soldPlayersList = Array.from(soldPlayers);
-  const soldPlayersData = mockPlayers.filter(player => soldPlayersList.includes(player.id));
+  const soldPlayersData = sortedPlayers.filter(player => player.status === 'sold');
   
   const goldSelected = soldPlayersData.filter(player => player.category === 'Gold').length;
   const silverSelected = soldPlayersData.filter(player => player.category === 'Silver').length;
   const bronzeSelected = soldPlayersData.filter(player => player.category === 'Bronze').length;
 
-  const currentPlayer = mockPlayers[currentPlayerIndex] || mockPlayers[0];
+  const currentPlayer = sortedPlayers[currentPlayerIndex] || sortedPlayers[0];
   const teamList = teamData
     .filter(team => canTeamBidOnPlayer(team, bidAmount))
     .map(team => ({ id: team.id, name: team.name }));
-  const isCurrentPlayerSold = soldPlayers.has(currentPlayer.id);
+  const isCurrentPlayerSold = currentPlayer.status === 'sold';
+  const isCurrentPlayerUnsold = currentPlayer.status === 'unsold';
+  
+  // Allow bidding on available players and unsold players when they become available
+  const isCurrentPlayerActuallyAvailable = 
+    (currentPlayer.status === 'available') || 
+    (shouldMakeUnsoldAvailable && currentPlayer.status === 'unsold');
 
   // Function to check if a team can bid on the current player
   function canTeamBidOnPlayer(team: MockTeam, currentBidAmount: number = bidAmount) {
@@ -295,15 +338,40 @@ const Dashboard: React.FC = () => {
   }, [currentPlayerIndex, teamData, selectedTeam, bidAmount]);
 
   const handleNextPlayer = () => {
-    setCurrentPlayerIndex((prev) => (prev + 1) % mockPlayers.length);
+    setCurrentPlayerIndex((prev) => (prev + 1) % sortedPlayers.length);
   };
 
   const handlePrevPlayer = () => {
-    setCurrentPlayerIndex((prev) => (prev - 1 + mockPlayers.length) % mockPlayers.length);
+    setCurrentPlayerIndex((prev) => (prev - 1 + sortedPlayers.length) % sortedPlayers.length);
   };
 
+  // Update current player index when sorting changes
+  React.useEffect(() => {
+    // If we're currently viewing a player that's no longer at the same index due to sorting changes
+    // Reset to first available player
+    if (currentPlayerIndex >= sortedPlayers.length) {
+      setCurrentPlayerIndex(0);
+    }
+  }, [sortedPlayers.length, currentPlayerIndex]);
+
+  // Handle re-available notification auto-dismiss
+  React.useEffect(() => {
+    if (shouldMakeUnsoldAvailable && !showReavailableNotification) {
+      setShowReavailableNotification(true);
+      
+      // Auto-dismiss after 5 seconds
+      const timer = setTimeout(() => {
+        setShowReavailableNotification(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    } else if (!shouldMakeUnsoldAvailable) {
+      setShowReavailableNotification(false);
+    }
+  }, [shouldMakeUnsoldAvailable, showReavailableNotification]);
+
   const handleSubmitBid = () => {
-    if (!isCurrentPlayerSold && selectedTeam) {
+    if (isCurrentPlayerActuallyAvailable && selectedTeam) {
       // Check if the selected team can still bid on this player category
       const selectedTeamData = teamData.find(team => team.id === selectedTeam);
       if (!selectedTeamData) return;
@@ -322,51 +390,60 @@ const Dashboard: React.FC = () => {
         return;
       }
 
-      // Mark player as sold
-      setSoldPlayers(prev => new Set([...prev, currentPlayer.id]));
-      
-      // Update team data
-      setTeamData(prevTeams => {
-        return prevTeams.map(team => {
-          if (team.id === selectedTeam) {
-            // Add player to team
-            const updatedPlayers = [...team.players, currentPlayer];
-            
-            // Update category counts
-            let newGoldCount = team.goldCount;
-            let newSilverCount = team.silverCount;
-            let newBronzeCount = team.bronzeCount;
-            
-            if (currentPlayer.category === 'Gold') {
-              newGoldCount += 1;
-            } else if (currentPlayer.category === 'Silver') {
-              newSilverCount += 1;
-            } else if (currentPlayer.category === 'Bronze') {
-              newBronzeCount += 1;
-            }
-            
-            // Update budget
-            const newRemaining = team.remaining - bidAmount;
-            
-            return {
-              ...team,
-              players: updatedPlayers,
-              goldCount: newGoldCount,
-              silverCount: newSilverCount,
-              bronzeCount: newBronzeCount,
-              totalPlayers: team.totalPlayers + 1,
-              remaining: newRemaining,
-              
-            };
-          }
-          return team;
-        });
-      });
-      
-             setShowSoldPopup(true);
+                           // Mark player as sold (whether they were originally available or unsold)
+        setPlayers(prevPlayers => 
+          prevPlayers.map(player => 
+            player.id === currentPlayer.id 
+              ? { ...player, status: 'sold' as const, wasUnsold: currentPlayer.wasUnsold }
+              : player
+          )
+        );
        
-       // Reset bid amount to default value after successful bid
-       setBidAmount(10);
+       // Update team data
+       setTeamData(prevTeams => {
+         return prevTeams.map(team => {
+           if (team.id === selectedTeam) {
+             // Add player to team
+             const updatedPlayers = [...team.players, currentPlayer];
+             
+             // Update category counts
+             let newGoldCount = team.goldCount;
+             let newSilverCount = team.silverCount;
+             let newBronzeCount = team.bronzeCount;
+             
+             if (currentPlayer.category === 'Gold') {
+               newGoldCount += 1;
+             } else if (currentPlayer.category === 'Silver') {
+               newSilverCount += 1;
+             } else if (currentPlayer.category === 'Bronze') {
+               newBronzeCount += 1;
+             }
+             
+             // Update budget
+             const newRemaining = team.remaining - bidAmount;
+             
+             return {
+               ...team,
+               players: updatedPlayers,
+               goldCount: newGoldCount,
+               silverCount: newSilverCount,
+               bronzeCount: newBronzeCount,
+               totalPlayers: team.totalPlayers + 1,
+               remaining: newRemaining,
+               
+             };
+           }
+           return team;
+         });
+       });
+       
+              setShowSoldPopup(true);
+        
+        // Reset bid amount to default value after successful bid
+        setBidAmount(10);
+        
+        // Reset team selection
+        setSelectedTeam('');
      }
    };
 
@@ -380,11 +457,20 @@ const Dashboard: React.FC = () => {
   };
 
   const handleUnsoldConfirm = () => {
-    // Mark player as sold (but not to any team)
-    setSoldPlayers(prev => new Set([...prev, currentPlayer.id]));
+    // Mark player as unsold
+    setPlayers(prevPlayers => 
+      prevPlayers.map(player => 
+        player.id === currentPlayer.id 
+          ? { ...player, status: 'unsold' as const, wasUnsold: true }
+          : player
+      )
+    );
     
     // Reset bid amount
     setBidAmount(10);
+    
+    // Reset team selection
+    setSelectedTeam('');
     
     // Close confirmation popup
     setShowUnsoldConfirm(false);
@@ -400,35 +486,54 @@ const Dashboard: React.FC = () => {
   return (
          <div className="dashboard-main">
        {/* Auction Progress Section */}
-       <AuctionProgress
-         currentPlayer={currentPlayerIndex + 1}
-         totalPlayers={mockPlayers.length}
-         goldSelected={goldSelected}
-         maxGold={2}
-         silverSelected={silverSelected}
-         maxSilver={4}
-         bronzeSelected={bronzeSelected}
-         maxBronze={6}
-       />
+               <AuctionProgress
+          currentPlayer={currentPlayerIndex + 1}
+          totalPlayers={sortedPlayers.length}
+          goldSelected={goldSelected}
+          maxGold={2}
+          silverSelected={silverSelected}
+          maxSilver={4}
+          bronzeSelected={bronzeSelected}
+          maxBronze={6}
+          onViewAllPlayers={() => setShowAllPlayersPopup(true)}
+        />
+        
+                           {/* Show notification when unsold players become available */}
+          {showReavailableNotification && (
+            <div className="reavailable-notification">
+              <div className="notification-content">
+                <span className="notification-icon">🔄</span>
+                                 <span className="notification-text">
+                   All available players have been sold! You can now bid on unsold players.
+                 </span>
+              </div>
+            </div>
+          )}
 
       {/* Main Content */}
       <div className="dashboard-content">
         {/* Left Panel - Player Card */}
         <div className="player-panel">
-          <div className={`player-card-enhanced ${isCurrentPlayerSold ? 'sold' : ''}`}>
-            <h3>Player Card</h3>
-            <div className="player-photo-section">
-              <img src={currentPlayer.photo} alt={currentPlayer.name} className="player-photo-large" />
-              <span className="player-number">#23</span>
-              {/* {isCurrentPlayerSold && (
-                <div className="sold-overlay">
-                  <div className="sold-badge">SOLD</div>
-                </div>
-              )} */}
-            </div>
-            {isCurrentPlayerSold && (
-                <Sold isAnimationNeeded={false} />
-              )}
+                                                                                                                                                                               <div className={`player-card-enhanced ${isCurrentPlayerUnsold && !shouldMakeUnsoldAvailable ? 'unsold' : ''} ${isCurrentPlayerUnsold && shouldMakeUnsoldAvailable ? 'resell' : ''}`}>
+              <h3>Player Card</h3>
+              <div className="player-photo-section">
+                <img src={currentPlayer.photo} alt={currentPlayer.name} className="player-photo-large" />
+                <span className="player-number">#23</span>
+                {/* {isCurrentPlayerSold && (
+                  <div className="sold-overlay">
+                    <div className="sold-badge">SOLD</div>
+                  </div>
+                )} */}
+              </div>
+                                                                                   {isCurrentPlayerSold && (
+                    <Sold isAnimationNeeded={false} />
+                  )}
+                {isCurrentPlayerUnsold && !shouldMakeUnsoldAvailable && (
+                    <Unsold isAnimationNeeded={false} />
+                  )}
+                {isCurrentPlayerUnsold && shouldMakeUnsoldAvailable && (
+                    <Resell isAnimationNeeded={false} />
+                  )}
             <h4 className="player-name">{currentPlayer.name}</h4>
             <p className="player-position">{currentPlayer.type}</p>
             <p className="player-category">{currentPlayer.category}</p>
@@ -462,9 +567,9 @@ const Dashboard: React.FC = () => {
               <div className="bid-amount">${bidAmount.toLocaleString()}</div>
             </div>
 
-            {/* Bid Input Section */}
-            <div className="bid-input-section">
-                             <BidInput
+                         {/* Bid Input Section */}
+             <div className="bid-input-section">
+                              <BidInput
                  bidAmount={bidAmount}
                  setBidAmount={setBidAmount}
                  teamList={teamList}
@@ -472,9 +577,9 @@ const Dashboard: React.FC = () => {
                  setSelectedTeam={setSelectedTeam}
                  onSubmit={handleSubmitBid}
                  onUnsold={handleUnsold}
-                 disabled={isCurrentPlayerSold}
+                 disabled={!isCurrentPlayerActuallyAvailable}
                />
-            </div>
+             </div>
 
                          {/* Player Navigation */}
              <div className="player-navigation">
@@ -496,8 +601,7 @@ const Dashboard: React.FC = () => {
                 return (
                  <div 
                    key={team.id} 
-                   className={`team-card-enhanced ${!canBid ? 'disabled-team' : ''}`} 
-                   onClick={() => handleTeamClick(team)}
+                   className={`team-card-enhanced ${!canBid ? 'disabled-team' : ''}`}
                  >
                    <div className="team-header">
                      <img src={team.ownerPhoto} alt={team.owner} className="owner-photo" />
@@ -505,6 +609,17 @@ const Dashboard: React.FC = () => {
                        <h4>{team.name}</h4>
                        <span className="owner-name">{team.owner.split(' ')[0]}</span>
                      </div>
+                     <button 
+                       className="view-players-btn" 
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         handleTeamClick(team);
+                       }}
+                       title="View team players"
+                     >
+                       <EyeIcon className="view-players-icon" />
+                       <span className="sr-only">View players</span>
+                     </button>
                    </div>
                    <div className="team-details">
                      <div className="budget-info">Budget: ${team.remaining.toLocaleString()}/${team.budget.toLocaleString()}</div>
@@ -564,6 +679,13 @@ const Dashboard: React.FC = () => {
          <TeamPlayerListPopup
            team={selectedTeamForPopup as any}
            onClose={() => setShowTeamPopup(false)}
+         />
+       )}
+
+       {showAllPlayersPopup && (
+         <AllPlayersPopup
+           teams={teamData as any}
+           onClose={() => setShowAllPlayersPopup(false)}
          />
        )}
 
