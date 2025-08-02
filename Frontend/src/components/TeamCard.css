@@ -1,0 +1,57 @@
+.team-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem;
+  margin: 1rem 0.5rem;
+  background: #fff;
+  min-width: 220px;
+  max-width: 300px;
+  transition: box-shadow 0.2s;
+}
+.team-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.team-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.owner-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+.owner-name {
+  font-size: 0.9em;
+  color: #666;
+}
+.team-info {
+  font-size: 1em;
+}
+.category-counts {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.category-counts .gold {
+  color: #ffd700;
+}
+.category-counts .silver {
+  color: #c0c0c0;
+}
+.category-counts .bronze {
+  color: #cd7f32;
+}
+@media (max-width: 600px) {
+  .team-card {
+    min-width: 100%;
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+  .team-header {
+    gap: 0.5rem;
+  }
+}
