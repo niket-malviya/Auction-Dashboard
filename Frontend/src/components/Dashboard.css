@@ -1,0 +1,131 @@
+/* Sold Player Card Animation */
+.player-card-enhanced.sold {
+  position: relative;
+  opacity: 0.8;
+  transform: scale(0.98);
+  transition: all 0.3s ease;
+}
+
+.player-card-enhanced.sold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 140, 0, 0.1));
+  border-radius: 16px;
+  z-index: 1;
+  animation: soldGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes soldGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+  }
+}
+
+.player-photo-section {
+  position: relative;
+}
+
+.sold-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  animation: soldPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes soldPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+.sold-badge {
+  background: linear-gradient(45deg, #ffd700, #ff8c00);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: badgeShine 2s ease-in-out infinite;
+}
+
+@keyframes badgeShine {
+  0%, 100% {
+    background: linear-gradient(45deg, #ffd700, #ff8c00);
+  }
+  50% {
+    background: linear-gradient(45deg, #ff8c00, #ffd700);
+  }
+}
+
+/* Disabled state styling */
+.player-card-enhanced.sold .bid-input-section {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.player-card-enhanced.sold .player-navigation {
+  opacity: 0.6;
+}
+
+.player-card-enhanced.sold .nav-btn {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.player-card-enhanced.sold .nav-btn:hover {
+  background: #ccc;
+}
+
+/* Unsold state styling */
+.player-card-enhanced.unsold .bid-input-section {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.player-card-enhanced.unsold .player-navigation {
+  opacity: 0.6;
+}
+
+.player-card-enhanced.unsold .nav-btn {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.player-card-enhanced.unsold .nav-btn:hover {
+  background: #ccc;
+}
+
+/* Max Bid Info */
+.max-bid-info {
+  font-size: 0.85rem;
+  color: #e74c3c;
+  font-weight: 600;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0.5rem;
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 4px;
+  text-align: center;
+} 

@@ -1,0 +1,133 @@
+/* Auction Progress Section */
+.auction-progress-section {
+  padding: 1rem 2rem;
+  background: white;
+  border-bottom: 1px solid #e9ecef;
+}
+
+/* Combined Progress Layout */
+.combined-progress {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.progress-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.progress-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #2c3e50;
+  white-space: nowrap;
+}
+
+.progress-count {
+  margin-left: auto;
+  font-weight: bold;
+  color: #7f8c8d;
+  font-size: 0.8rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #27ae60;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-fill.gold-fill {
+  background: linear-gradient(90deg, #ffd700 0%, #ffed4e 100%);
+}
+
+.progress-fill.silver-fill {
+  background: linear-gradient(90deg, #c0c0c0 0%, #e5e5e5 100%);
+}
+
+.progress-fill.bronze-fill {
+  background: linear-gradient(90deg, #cd7f32 0%, #daa520 100%);
+}
+
+.category-icon {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.category-icon.gold {
+  color: #ffd700;
+}
+
+.category-icon.silver {
+  color: #c0c0c0;
+}
+
+.category-icon.bronze {
+  color: #cd7f32;
+}
+
+/* Eye Icon Container */
+.eye-icon-container {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.5rem;
+}
+
+.view-all-players-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+  width: 40px;
+  height: 40px;
+}
+
+.view-all-players-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  transition: color 0.2s;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .combined-progress {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .progress-item {
+    flex: none;
+  }
+  
+  .eye-icon-container {
+    align-self: flex-end;
+    padding-bottom: 0;
+  }
+} 

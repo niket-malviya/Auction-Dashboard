@@ -1,0 +1,164 @@
+.team-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1rem;
+  margin: 1rem 0.5rem;
+  background: #fff;
+  min-width: 220px;
+  max-width: 300px;
+  transition: box-shadow 0.2s;
+}
+
+.team-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+/* Team Header Section */
+.team-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding: 0.25rem;
+}
+
+.team-header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.team-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+
+.team-name-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.team-name {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.owner-name {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.view-players-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.view-players-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  transition: color 0.2s;
+}
+
+.view-players-btn:hover .eye-icon {
+  color: #374151;
+}
+
+/* Team Information Section */
+.team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.0rem;
+  font-size: 0.9em;
+  color: #6b7280;
+}
+
+.budget-info,
+.players-info,
+.max-bid-info {
+  font-weight: 500;
+}
+
+.max-bid-info {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.category-info {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.category-info span {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.category-info .gold {
+  background: #ffd700;
+  color: #333;
+}
+
+.category-info .silver {
+  background: #c0c0c0;
+  color: #333;
+}
+
+.category-info .bronze {
+  background: #cd7f32;
+  color: white;
+}
+
+.category-info .limit-reached {
+  opacity: 0.5;
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  .team-card {
+    min-width: 100%;
+    max-width: 100%;
+    margin: 1rem 0;
+  }
+  
+  .team-header-content {
+    gap: 0.75rem;
+  }
+  
+  .category-info {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

@@ -1,0 +1,77 @@
+.team-player-popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.team-player-popup {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  position: relative;
+  min-width: 320px;
+  max-width: 95vw;
+  text-align: center;
+}
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+}
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0 0;
+}
+.player-list-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.player-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #eee;
+}
+.player-type {
+  font-size: 0.9em;
+  color: #666;
+}
+.category-badge {
+  padding: 2px 8px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85em;
+  margin-left: 0.3em;
+}
+.category-badge.gold {
+  background: #ffd700;
+  color: #333;
+}
+.category-badge.silver {
+  background: #c0c0c0;
+  color: #333;
+}
+.category-badge.bronze {
+  background: #cd7f32;
+  color: #fff;
+}
+@media (max-width: 600px) {
+  .team-player-popup {
+    min-width: 90vw;
+    padding: 1rem;
+  }
+}

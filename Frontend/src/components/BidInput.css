@@ -1,0 +1,194 @@
+.bid-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.bid-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bid-controls button {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #3498db;
+  background: white;
+  color: #3498db;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.bid-controls button:hover:not(:disabled) {
+  background: #3498db;
+  color: white;
+}
+
+.bid-controls button:disabled,
+.bid-controls button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #ccc;
+}
+
+.bid-controls button:disabled:hover,
+.bid-controls button.disabled:hover {
+  background: white;
+  color: #ccc;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bid-input input {
+  width: 100px;
+  padding: 0.5rem;
+  text-align: center;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.bid-input input.error {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+
+.error-message {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e74c3c;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-top: 2px;
+}
+
+/* Remove up/down arrows from number input */
+.bid-input input[type="number"]::-webkit-outer-spin-button,
+.bid-input input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bid-input input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.bid-input input:disabled,
+.bid-input input.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.bid-input select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #3498db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.bid-input select:disabled,
+.bid-input select.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+.bid-input button[type="button"] {
+  width: 100%;
+  padding: 0.75rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bid-input button[type="button"]:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.bid-input button[type="button"]:disabled,
+.bid-input button[type="button"].disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #ccc;
+}
+
+.bid-input button[type="button"]:disabled:hover,
+.bid-input button[type="button"].disabled:hover {
+  background: #ccc;
+}
+
+.bid-buttons {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.bid-buttons button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.bid-buttons button:first-child {
+  background: #e74c3c;
+  color: white;
+}
+
+.bid-buttons button:first-child:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.bid-buttons button:last-child {
+  background: #27ae60;
+  color: white;
+}
+
+.bid-buttons button:last-child:hover:not(:disabled) {
+  background: #229954;
+}
+
+.bid-buttons button:disabled,
+.bid-buttons button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #ccc;
+}
+
+.bid-buttons button:disabled:hover,
+.bid-buttons button.disabled:hover {
+  background: #ccc;
+}
