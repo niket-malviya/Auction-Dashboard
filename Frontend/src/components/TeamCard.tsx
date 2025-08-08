@@ -21,7 +21,17 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, onViewPlayers }) => {
       {/* Team Header Section */}
       <div className="team-header">
         <div className="team-header-content">
-          <img src={team.ownerPhoto} alt={team.owner} className="owner-photo" />
+          
+        <img
+  src={team.img_url }
+  alt={`${team.name} Logo`}
+  className="team-photo"
+  onError={(e) => {
+    e.currentTarget.onerror = null;
+    e.currentTarget.src = '/default-photo.jpg'; // fallback if backend image fails
+  }}
+/>
+
           <div className="team-name-section">
             <h4 className="team-name">{team.name}</h4>
             <span className="owner-name">Owner: {team.owner}</span>

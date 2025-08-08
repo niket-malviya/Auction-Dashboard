@@ -10,7 +10,7 @@ interface AllPlayersPopupProps {
 const AllPlayersPopup: React.FC<AllPlayersPopupProps> = ({ teams, onClose }) => {
   // Get all players from all teams
   const allPlayers = teams.flatMap(team => 
-    team.players.map(player => ({
+    team.players?.map(player => ({
       ...player,
       teamName: team.name,
       teamOwner: team.owner
@@ -19,7 +19,7 @@ const AllPlayersPopup: React.FC<AllPlayersPopupProps> = ({ teams, onClose }) => 
 
   // Group players by team
   const playersByTeam = teams.reduce((acc, team) => {
-    acc[team.name] = team.players;
+    acc[team.name] = team?.players || [];
     return acc;
   }, {} as Record<string, any[]>);
 
@@ -76,21 +76,21 @@ const AllPlayersPopup: React.FC<AllPlayersPopupProps> = ({ teams, onClose }) => 
                       <h3>{team.name}</h3>
                       <span className="owner">Owner: {team.owner}</span>
                       <span className="player-count">
-                        {team.players.length} player{team.players.length !== 1 ? 's' : ''}
+                        {team.players?.length} player{team.players?.length !== 1 ? 's' : ''}
                       </span>
                     </div>
                     
-                    {team.players.length > 0 ? (
+                    {team.players.length > 0 ?  (
                       <div className="players-grid">
-                        {team.players.map(player => (
+                        {team.players?.map(player => (
                           <div key={player.id} className="player-card">
                             <div className="player-photo">
-                              <img src={player.photo} alt={player.name} />
+                              <img src={player.imgUrl || ""} alt={player.name} />
                             </div>
                             <div className="player-info">
                               <h4>{player.name}</h4>
                               <p className="player-position">{player.type}</p>
-                              <span className={`category-badge ${player.category.toLowerCase()}`}>
+                              <span className={`category-badge ${player.category?.toLowerCase()}`}>
                                 {player.category}
                               </span>
                             </div>

@@ -1,32 +1,44 @@
 // Types
-export type PlayerType = 'Batter' | 'Bowler' | 'Allrounder';
-export type PlayerCategory = 'Gold' | 'Silver' | 'Bronze';
+export type BattingType = 'left' | 'right' | null;
+export type BowlingType = 'left' | 'right' | null;
+export type PlayerCategory = 'gold' | 'silver' | 'bronze' | null;
 export type PlayerStatus = 'available' | 'sold' | 'unsold';
 
 export interface Player {
   id: string;
   name: string;
+  lastName: string;
+  flatNo: string;
   age: number;
-  photo: string;
-  type: PlayerType;
+  mobileNumber: string;
+  batterType: BattingType;
+  bowlerType: BowlingType;
   category: PlayerCategory;
+  tournamentId: string;
   status?: PlayerStatus;
+  imgUrl?: string | null;
+  // frontend-only field
+  type?: 'Batter' | 'Bowler' | 'Allrounder'; // derived on frontend
 }
+
 
 export interface Team {
   id: string;
   name: string;
   owner: string;
-  ownerPhoto: string;
-  players: Player[];
+  budget: number;
+  remaining: number;
+  maxPlayers: number;
+  img_url?: string;
+  // frontend-only fields
+  totalPlayers: number;
   goldCount: number;
   silverCount: number;
   bronzeCount: number;
   maxGold: number;
   maxSilver: number;
   maxBronze: number;
-  totalPlayers: number;
-  maxPlayers: number;
-  budget: number;
-  remaining: number;
-} 
+  ownerPhoto?: string;
+  players?: Player[];
+}
+

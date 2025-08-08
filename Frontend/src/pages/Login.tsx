@@ -1,13 +1,35 @@
+
+
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const navigate =useNavigate();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: handle login
-    alert(`Logged in as ${username}`);
+    setError('');
+
+    try {
+      const response = await axios.post('http://localhost:5000/login', {
+        email,
+        password,
+      });
+
+      const { access_token } = response.data;
+      localStorage.setItem('token', access_token); // Save JWT token
+      navigate('/auction-info');
+
+      alert('Login successful!');
+      // Optional: redirect to dashboard or update auth state
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError('Invalid credentials or server error');
+    }
   };
 
   return (
@@ -15,10 +37,10 @@ const Login: React.FC = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
           required
         />
         <input
@@ -30,6 +52,7 @@ const Login: React.FC = () => {
         />
         <button type="submit">Login</button>
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };

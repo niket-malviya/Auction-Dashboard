@@ -8,7 +8,7 @@ interface ResellProps {
 const Resell: React.FC<ResellProps> = ({ isAnimationNeeded = false }) => {
   return (
     <div className={`resell-badge ${isAnimationNeeded ? 'animated' : ''}`}>
-      RESELL
+      UNSOLD
     </div>
   );
 };

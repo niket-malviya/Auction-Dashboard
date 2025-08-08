@@ -4,7 +4,7 @@ import './BidInput.css';
 interface BidInputProps {
   bidAmount: number;
   setBidAmount: (amount: number) => void;
-  teamList: { id: string; name: string }[];
+  teamList: { id: string; name: string }[] | undefined;
   selectedTeam: string;
   setSelectedTeam: (team: string) => void;
   onSubmit: () => void;
