@@ -23,3 +23,4 @@ class Player(db.Model):
         "status IN ('sold', 'unsold')", name="players_status_check"), default='unsold', nullable=False)
     
     tournament_id = db.Column(db.Uuid(as_uuid=True), db.ForeignKey('tournament.id'), nullable=False)
+    is_owner = db.Column(db.Boolean, nullable=True, default=False)

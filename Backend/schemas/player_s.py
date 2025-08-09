@@ -13,3 +13,4 @@ class PlayerSchema(Schema):
     category = fields.String(required=True, validate=validate.OneOf(['gold', 'silver', 'bronze']))
     status = fields.String(validate=validate.OneOf(['sold', 'unsold','available']))
     tournament_id = fields.UUID(required=True)
+    is_owner = fields.Boolean(required=True)
