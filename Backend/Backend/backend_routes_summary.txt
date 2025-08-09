@@ -1,0 +1,157 @@
+Backend API Routes and Functionality Summary
+===========================================
+
+1. Authentication Routes (/auth)
+--------------------------------
+- POST /signup
+  Registers a new user. Expects user data in the request body. Returns success or error message.
+- POST /login
+  Authenticates a user and returns a token. Expects credentials in the request body. Returns JWT token and user info on success.
+- POST /forgot-password
+  Initiates password reset process. Expects email or identifier in the request body. Returns status of password reset initiation.
+
+2. Player Routes (/players, /tournaments/<tournament_id>/players)
+---------------------------------------------------------------
+- POST /players (Admin only)
+  Creates a new player. Expects player data in the request body.
+- GET /players
+  Retrieves a list of all players.
+- GET /players/<player_id>
+  Retrieves details of a specific player by ID.
+- PUT /players/<player_id> (Admin only)
+  Updates a player's information.
+- DELETE /players/<player_id> (Admin only)
+  Deletes a player.
+- GET /tournaments/<tournament_id>/players
+  Lists all players in a specific tournament.
+- POST /players/import (Admin only)
+  Imports players from an uploaded Excel file.
+
+3. Sport Type Routes (/sport-types)
+-----------------------------------
+- POST /sport-types (Admin only)
+  Creates a new sport type.
+- GET /sport-types
+  Lists all sport types.
+- GET /sport-types/<sport_id>
+  Gets details of a specific sport type.
+- PUT /sport-types/<sport_id> (Admin only)
+  Updates a sport type.
+- DELETE /sport-types/<sport_id> (Admin only)
+  Deletes a sport type.
+
+4. Team Routes (/teams, /tournaments/<tournament_id>/teams)
+----------------------------------------------------------
+- POST /teams (Admin only)
+  Creates a new team.
+- PUT /teams/<team_id> (Admin only)
+  Updates a team.
+- DELETE /teams/<team_id> (Admin only)
+  Deletes a team.
+- GET /teams
+  Lists all teams.
+- GET /teams/<team_id>
+  Gets details of a specific team.
+- GET /tournaments/<tournament_id>/teams
+  Lists all teams in a specific tournament.
+
+5. Tournament Routes (/tournament, /get_all_tournament, etc.)
+------------------------------------------------------------
+- POST /tournament (Admin only)
+  Creates a new tournament.
+- GET /get_all_tournament
+  Lists all tournaments.
+- GET /by_id_tournament/<tournament_id>
+  Gets details of a specific tournament.
+- PUT /update_tournament/<tournament_id> (Admin only)
+  Updates a tournament.
+- DELETE /delete_tournament/<tournament_id> (Admin only)
+  Deletes a tournament.
+
+6. Team-Player Relationship Routes (/team_players, /team_players/team/<team_id>, etc.)
+--------------------------------------------------------------------------------------
+- POST /team_players (Admin only)
+  Assigns a player to a team for a tournament. Prevents duplicate assignments.
+- GET /team_players
+  Lists all team-player assignments.
+- DELETE /team_players/<team_id>/<player_id>/<tournament_id> (Admin only)
+  Removes a player from a team in a tournament.
+- GET /team_players/<team_id>/<player_id>/<tournament_id>
+  Gets details of a specific team-player-tournament assignment.
+- GET /team_players/team/<team_id>
+  Lists all players assigned to a specific team.
+
+7. Unsold Player Routes (/unsold_players)
+-----------------------------------------
+- POST /unsold_players
+  Adds a player to the unsold list.
+- GET /unsold_players
+  Lists all unsold players.
+
+8. Test/Utility Route
+---------------------
+- GET /test-db
+  Checks database connectivity. Returns success or error message.
+
+General Notes
+-------------
+- Most routes (except /signup, /login, /forgot-password, /test-db) require JWT authentication.
+- Admin-only routes check for user type (admin or super_admin).
+- CRUD operations are available for players, teams, tournaments, and sport types.
+- There are special routes for importing players, managing team-player assignments, and handling unsold players. 
+
+Database Structure
+=================
+
+1. users
+   - id: UUID (primary key)
+   - name: String(100)
+   - email: String(120), unique
+   - password: String(255)
+   - type: String(20)  // e.g. "admin", "user"
+
+2. players
+   - id: UUID (primary key)
+   - name: String
+   - last_name: String
+   - flat_no: String
+   - age: Integer
+   - mobile_number: String
+   - img_url: String (nullable)
+   - bowler_type: String ('left' or 'right')
+   - batter_type: String ('left' or 'right')
+   - category: String ('extraordinary', 'avg', 'new')
+   - tournament_id: UUID (foreign key to tournament.id)
+
+3. sport_type
+   - id: UUID (primary key)
+   - sport_name: String
+
+4. teams
+   - id: UUID (primary key)
+   - team_name: String
+   - owner_name: String
+   - total_amount: Float
+   - remaining_amount: Float
+   - max_players: Integer
+
+5. tournament
+   - id: UUID (primary key)
+   - users_id: UUID (foreign key to users.id)
+   - name: String(100)
+   - sport_id: UUID (foreign key to sport_type.id)
+   - tournament_type: String(50)
+   - start_date: Date
+   - end_date: Date
+   - venue: String(150)
+
+6. team_players
+   - team_id: UUID (primary key, foreign key to teams.id)
+   - player_id: UUID (primary key, foreign key to players.id)
+   - tournament_id: UUID (primary key, foreign key to tournament.id)
+   - bid_amount: Float
+
+7. unsold_players
+   - id: UUID (primary key)
+   - player_id: UUID (foreign key to players.id)
+   - tournament_id: UUID (foreign key to tournament.id) 
