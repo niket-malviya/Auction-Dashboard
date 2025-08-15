@@ -71,7 +71,8 @@ const Dashboard: React.FC = () => {
     const loadPlayers = async ()=>{
       try {
         const data = await fetchPlayers();
-        setPlayers(data);
+        const auctionPlayers = data.filter((player: BackendPlayer) => !player.isOwner);
+        setPlayers(auctionPlayers);
       } catch (error) {
         console.error('Failed to fetch players:', error);
       }
@@ -348,6 +349,15 @@ const handleSubmitBid = async () => {
                   </div>
                 </div>
               </div>
+              {/* Player Navigation */}
+              <div className="player-navigation">
+                <button onClick={handlePrevPlayer} className="nav-btn arrow-btn">
+                  <span className="arrow-icon">&lt;</span>
+                </button>
+                <button onClick={handleNextPlayer} className="nav-btn arrow-btn">
+                  <span className="arrow-icon">&gt;</span>
+                </button>
+              </div>
             </div>
 
             {/* Bidding Section (Bottom) */}
@@ -381,16 +391,6 @@ const handleSubmitBid = async () => {
                   onUnsold={handleUnsold}
                   disabled={!isCurrentPlayerActuallyAvailable}
                 />
-              </div>
-
-              {/* Player Navigation */}
-              <div className="player-navigation">
-                <button onClick={handlePrevPlayer} className="nav-btn arrow-btn">
-                  <span className="arrow-icon">&lt;</span>
-                </button>
-                <button onClick={handleNextPlayer} className="nav-btn arrow-btn">
-                  <span className="arrow-icon">&gt;</span>
-                </button>
               </div>
             </div>
           </div>

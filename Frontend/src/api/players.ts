@@ -13,6 +13,7 @@ export type Player = {
   category: 'gold' | 'silver' | 'bronze' | null;
   tournamentId: string;
   status:string;
+  isOwner: boolean;
 };
 
 export const fetchPlayers = async (): Promise<Player[]> => {
@@ -29,6 +30,7 @@ export const fetchPlayers = async (): Promise<Player[]> => {
     batterType: player.batter_type,
     category: player.category,
     tournamentId: player.tournament_id,
-    status:player.status
+    status:player.status,
+    isOwner: player.is_owner,
   }));
 };
