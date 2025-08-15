@@ -210,6 +210,24 @@
   margin: 0;
 }
 
+.team-players-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+}
+.team-players-table th, .team-players-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.team-players-table th {
+  background-color: #f5f5f5;
+}
+.team-section h3 {
+  margin-top: 24px;
+  margin-bottom: 4px;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .all-players-popup {
@@ -239,4 +257,4 @@
   .players-grid {
     grid-template-columns: 1fr;
   }
-} 
+}

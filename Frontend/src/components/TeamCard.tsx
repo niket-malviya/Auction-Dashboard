@@ -60,9 +60,9 @@ const TeamCard: React.FC<TeamCardProps> = ({ team, onViewPlayers }) => {
           <span className={`silver ${team.silverCount >= team.maxSilver ? 'limit-reached' : ''}`}>
             Silver: {team.silverCount}/{team.maxSilver}
           </span>
-          <span className={`bronze ${team.bronzeCount >= team.maxBronze ? 'limit-reached' : ''}`}>
+          {/* <span className={`bronze ${team.bronzeCount >= team.maxBronze ? 'limit-reached' : ''}`}>
             Bronze: {team.bronzeCount}/{team.maxBronze}
-          </span>
+          </span> */}
         </div>
       </div>
     </div>

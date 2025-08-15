@@ -10,6 +10,14 @@
   align-items: center;
   justify-content: space-between;
 }
+.tournament-name {
+  font-weight: bold;
+  color: red;
+  font-size: 1.2rem; /* optional: make it slightly bigger */
+  margin-right: 1rem; /* optional: spacing from nav links */
+    text-transform: uppercase; /* makes all letters capital */
+
+}
 
 .nav-links-wrapper {
   flex: 1;

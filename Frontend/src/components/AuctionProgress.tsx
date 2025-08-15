@@ -3,7 +3,7 @@ import { EyeIcon } from '@heroicons/react/24/outline';
 import './AuctionProgress.css';
 
 interface AuctionProgressProps {
-  currentPlayer: number;
+  issold: number;
   totalPlayers: number;
   goldSelected: number;
   maxGold: number;
@@ -15,7 +15,7 @@ interface AuctionProgressProps {
 }
 
 const AuctionProgress: React.FC<AuctionProgressProps> = ({
-  currentPlayer,
+  issold,
   totalPlayers,
   goldSelected,
   maxGold,
@@ -25,10 +25,10 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
   maxBronze,
   onViewAllPlayers
 }) => {
-  const overallProgress = (currentPlayer / totalPlayers) * 100;
+  const overallProgress = (issold / totalPlayers) * 100;
   const goldProgress = (goldSelected / maxGold) * 100;
   const silverProgress = (silverSelected / maxSilver) * 100;
-  const bronzeProgress = (bronzeSelected / maxBronze) * 100;
+  // const bronzeProgress = (bronzeSelected / maxBronze) * 100;
 
   return (
     <div className="auction-progress-section">
@@ -36,7 +36,7 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
         <div className="progress-item">
           <div className="progress-label">
             <span>Auction</span>
-            <span className="progress-count">Player {currentPlayer} of {totalPlayers}</span>
+            <span className="progress-count">Player {issold} of {totalPlayers}</span>
           </div>
           <div className="progress-bar">
             <div className="progress-fill" style={{ width: `${overallProgress}%` }}></div>
@@ -71,7 +71,7 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
           </div>
         </div>
         
-        <div className="progress-item">
+        {/* <div className="progress-item">
           <div className="progress-label">
             <span className="category-icon bronze">●</span>
             <span>Bronze</span>
@@ -83,7 +83,7 @@ const AuctionProgress: React.FC<AuctionProgressProps> = ({
               style={{ width: `${bronzeProgress}%` }}
             ></div>
           </div>
-        </div>
+        </div> */}
         
         {onViewAllPlayers && (
           <div className="eye-icon-container">

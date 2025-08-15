@@ -11,6 +11,8 @@ import Unsold from '../components/Unsold';
 import Resell from '../components/Resell';
 import { fetchPlayers } from '../api/players';
 import type { Player as BackendPlayer } from '../api/players';
+import { downloadAuctionPdf } from "../api/Pdf";
+
 
 import { fetchTeams } from '../api/teamsApi';
 import { assignPlayerToTeam } from '../api/soldPlayer';
@@ -53,6 +55,18 @@ const Dashboard: React.FC = () => {
   const [teamData, setTeamData] = useState<Team[]>([]);
   const [players, setPlayers] = useState<BackendPlayer[]>([]);
   const [showReavailableNotification, setShowReavailableNotification] = useState(false);
+  
+  const handleEndAuction = async () => {
+    const success = await downloadAuctionPdf();
+    if (success) {
+      alert("PDF downloaded successfully!");
+      // Optional: reset auction data
+      // setSortedPlayers([]);
+      // setCurrentPlayerIndex(0);
+    } else {
+      alert("Error downloading PDF.");
+    }
+  };
 
   useEffect(() => {
     const loadTeams = async () => {
@@ -224,13 +238,15 @@ const handleSubmitBid = async () => {
         bidAmount
       );
 
-      setPlayers((prevPlayers: BackendPlayer[]) => 
-        prevPlayers.map((player: BackendPlayer) => 
-          player.id === currentPlayer.id 
+      setPlayers((prevPlayers: BackendPlayer[]) => { 
+        console.log("currentPlayer", currentPlayer);
+        return prevPlayers.map((player: BackendPlayer) => {
+          console.log("player id", currentPlayer.id);
+          return player.id === currentPlayer.id 
             ? { ...player, status: 'sold' as const }
             : player
-        )
-      );
+    })
+    });
 
       // 🟢 Fetch latest team data from backend
       const updatedTeams = await fetchTeams();
@@ -297,7 +313,46 @@ const handleSubmitBid = async () => {
         maxBronze={6}
         onViewAllPlayers={() => setShowAllPlayersPopup(true)}
       />
-      
+       {/* End Auction Button */}
+      {/* End Auction + Download PDF Buttons */}
+<div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+  <button
+    onClick={handleEndAuction}
+    style={{
+      backgroundColor: "#d9534f",
+      color: "#fff",
+      border: "none",
+      padding: "8px 12px",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+    End Auction
+  </button>
+
+  <button
+    onClick={async () => {
+      const tournamentId = currentPlayer.tournamentId; // Replace with actual tournament ID
+      const success = await downloadAuctionPdf(tournamentId);
+      if (success) {
+        alert("Auction PDF downloaded successfully!");
+      } else {
+        alert("Failed to download PDF.");
+      }
+    }}
+    style={{
+      backgroundColor: "#0275d8",
+      color: "#fff",
+      border: "none",
+      padding: "8px 12px",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+    Download PDF
+  </button>
+</div>
+
       {/* Show notification when unsold players become available */}
       {showReavailableNotification && (
         <div className="reavailable-notification">
@@ -318,15 +373,23 @@ const handleSubmitBid = async () => {
           <div className={`combined-card ${currentPlayer?.category?.toLowerCase() || ''} ${isCurrentPlayerUnsold && !shouldMakeUnsoldAvailable ? 'unsold' : ''} ${isCurrentPlayerUnsold && shouldMakeUnsoldAvailable ? 'resell' : ''}`}>
             {/* Player Card Section (Top) */}
             <div className="player-card-section">
-              {isCurrentPlayerSold && (
-                <div className="sold-out-badge">Sold Out</div>
-              )}
               <div className="player-photo-section">
                 <img src={currentPlayer?.imgUrl || '/default-player.png'} alt={currentPlayer?.name} className="player-photo-large" />
+                 {isCurrentPlayerSold && (
+                <Sold isAnimationNeeded={false} positionClass="dashboard-position"/>
+              )}
+              {isCurrentPlayerUnsold && !shouldMakeUnsoldAvailable && (
+                <Unsold isAnimationNeeded={false} />
+              )}
+              {isCurrentPlayerUnsold && shouldMakeUnsoldAvailable && (
+                <Resell isAnimationNeeded={false} />
+              )}
+
               </div>
               <h4 className="player-name">
                 {currentPlayer ? `${currentPlayer.name} ${currentPlayer.lastName}` : ''}
               </h4>
+              
               <div className="player-stats">
                 <div className="info-row">
                   <div className="info-item">
@@ -364,15 +427,7 @@ const handleSubmitBid = async () => {
             <div className="bidding-section">
           
               
-              {isCurrentPlayerSold && (
-                <Sold isAnimationNeeded={false} />
-              )}
-              {isCurrentPlayerUnsold && !shouldMakeUnsoldAvailable && (
-                <Unsold isAnimationNeeded={false} />
-              )}
-              {isCurrentPlayerUnsold && shouldMakeUnsoldAvailable && (
-                <Resell isAnimationNeeded={false} />
-              )}
+             
               
               <div className="current-bid-section">
                 <p className="bid-label">Current Highest Bid</p>

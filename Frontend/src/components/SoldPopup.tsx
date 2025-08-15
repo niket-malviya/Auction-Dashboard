@@ -15,7 +15,7 @@ const SoldPopup: React.FC<SoldPopupProps> = ({ player, team, onClose }) => {
       <div className="sold-popup">
         <button className="close-btn" onClick={onClose}>&times;</button>
         {/* <h2>SOLD!</h2> */}
-        <h2><Sold isAnimationNeeded={true} /></h2>
+        <h2><Sold isAnimationNeeded={true} positionClass="soldPopup-position"/></h2>
         <div className="sold-info">
           <img src={player.imgUrl} alt={player.name} className="sold-player-photo" />
           <div>

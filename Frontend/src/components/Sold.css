@@ -1,4 +1,4 @@
-.sold-out-stamp {
+/* .sold-out-stamp {
     display: inline-block;
     padding: 10px 25px;
     color: #059669;
@@ -12,7 +12,41 @@
     background-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 0 4px #059669 inset;
     transition: transform 0.3s, opacity 0.3s;
-  }
+  } */
+
+/* Common to all Sold */
+.sold-out-stamp {
+  position: absolute;
+  z-index: 10;
+  display: inline-block;
+  padding: 10px 25px;
+  color: #059669;
+  border: 4px solid #059669;
+  font-weight: bold;
+  font-size: 28px;
+  text-transform: uppercase;
+  transform: rotate(-15deg);
+  font-family: 'Arial Black', sans-serif;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 4px #059669 inset;
+  width: max-content;
+  white-space: nowrap;
+}
+
+/* Popup alignment */
+.soldPopup-position {
+  top: 120px;
+  right: 20px;
+}
+
+/* Dashboard alignment */
+.dashboard-position {
+  top: 230px;
+  right: -50px;
+}
+
+
   
   /* Animation Class to Trigger Stamp */
   .sold-out-stamp.animate {
