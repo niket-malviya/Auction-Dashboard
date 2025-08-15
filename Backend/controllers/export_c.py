@@ -1,62 +1,27 @@
-from flask import send_file
+# controllers/export_c.py
+from functools import wraps
+from flask import jsonify, request
+from flask_jwt_extended import get_jwt_identity
+from models.user import User
 from services.pdf_export_service import TournamentPDFExportService
 from models.tournament import Tournament
-from io import BytesIO
 
-def export_tournament_pdf(tournament_id, export_type="details"):
-    """Export tournament details as PDF"""
-    # Check if tournament exists
-    tournament = Tournament.query.get(tournament_id)
-    if not tournament:
-        return {'message': 'Tournament not found'}, 404
-    
-    # Create PDF export service
+def admin_required(fn):
+    """Decorator to ensure the user has admin privileges"""
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'message': 'User not found'}), 404
+        if user.type not in ['admin', 'super_admin']:
+            return jsonify({'message': 'Admin privileges required'}), 403
+        return fn(*args, **kwargs)
+    return wrapper
+
+# Optional helper to export auction PDF (can be used in routes)
+def export_auction_pdf_service(tournament_id):
+    """Generate auction PDF using the service"""
     pdf_service = TournamentPDFExportService()
-    
-    try:
-        if export_type == "summary":
-            buffer, error = pdf_service.export_tournament_summary(tournament_id)
-        else:
-            buffer, error = pdf_service.export_tournament_details(tournament_id)
-        
-        if error:
-            return {'message': error}, 400
-        
-        # Prepare file for download
-        buffer.seek(0)
-        
-        # Generate filename
-        filename = f"tournament_{tournament.name.replace(' ', '_')}_{export_type}.pdf"
-        
-        return send_file(
-            buffer,
-            as_attachment=True,
-            download_name=filename,
-            mimetype='application/pdf'
-        )
-        
-    except Exception as e:
-        return {'message': f'Error generating PDF: {str(e)}'}, 500
-
-def get_export_options(tournament_id):
-    """Get available export options for a tournament"""
-    tournament = Tournament.query.get(tournament_id)
-    if not tournament:
-        return {'message': 'Tournament not found'}, 404
-    
-    return {
-        'tournament_id': tournament_id,
-        'tournament_name': tournament.name,
-        'export_options': [
-            {
-                'type': 'details',
-                'name': 'Full Tournament Details',
-                'description': 'Complete tournament information with all teams and players'
-            },
-            {
-                'type': 'summary',
-                'name': 'Tournament Summary',
-                'description': 'Brief overview with statistics'
-            }
-        ]
-    }, 200 
+    buffer, error = pdf_service.export_auction_summary(tournament_id)
+    return buffer, error
