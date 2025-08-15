@@ -16,5 +16,15 @@ class Team(db.Model):
     silver = db.Column(db.Integer, default=0)
     bronze = db.Column(db.Integer, default=0)
 
+    # New column: Tournament foreign key
+    tournament_id = db.Column(
+        db.Uuid(as_uuid=True),
+        db.ForeignKey('tournament.id', ondelete="CASCADE"),
+        nullable=False
+    )
+
     # Relationships
     team_players = db.relationship("TeamPlayer", backref="team", lazy=True)
+
+    # Optional: Relationship to Tournament model
+    tournament = db.relationship("Tournament", backref=db.backref("teams", lazy=True, cascade="all, delete"))

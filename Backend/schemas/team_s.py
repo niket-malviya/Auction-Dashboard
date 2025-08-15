@@ -12,3 +12,4 @@ class TeamSchema(Schema):
     silver = fields.Integer(dump_only=True)
     bronze = fields.Integer(dump_only=True)
     img_url = fields.String(allow_none=True) 
+    tournament_id = fields.UUID(required=True)
